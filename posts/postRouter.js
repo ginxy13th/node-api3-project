@@ -21,7 +21,6 @@ router.get('/:id', validatePostId(), (req, res, next) => {
 })
 
 router.delete('/:id', validatePostId(), (req, res, next) => {
-  // do your magic!
   const deletePost = postDB.remove(req.params.id)
   if (deletePost) {
     res.status(200).json({ data: deletePost })

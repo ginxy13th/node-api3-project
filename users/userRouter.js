@@ -95,19 +95,27 @@ function validateUserId() {
       })
       .catch(err => {
         console.log(err)
-        res.status(500).json({ message: "nope" })
+        res.status(500).json({ message: "invalid user id" })
       })
   }
 }
 
 function validateUser() {
   return (req, res, next) => {
-    if (req.body.name) {
-      req.body = req.body
-      next()
-    } else {
-      res.status(400).json({ message: 'Please make sure your input is valid' })
-    }
+    postDB.get()
+    .then(req => {
+        if (req.body) {
+        req.body = req.body
+        next()
+      } else if (!req.name) {
+        res.status(400).json({ message: "missing user data" })
+      } else {
+        res.status(400).json({ message: "missing required name field" })
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 }
 
