@@ -16,11 +16,11 @@ router.get('/', (req, res, next) => {
     })
 })
 
-router.get('/:id', validatePostId(), (req, res, next) => {
+router.get('/:id', validatePostId(), (req, res) => {
   res.status(200).json({ data: req.post })
 })
 
-router.delete('/:id', validatePostId(), (req, res, next) => {
+router.delete('/:id', validatePostId(), (req, res) => {
   const deletePost = postDB.remove(req.params.id)
   if (deletePost) {
     res.status(200).json({ data: deletePost })
@@ -29,13 +29,15 @@ router.delete('/:id', validatePostId(), (req, res, next) => {
   }
 })
 
-router.put('/:id', validatePostId(), (req, res, next) => {
-  if (req.body.text) {
-    const editPost = postDB.update(req.params.id, req.body)
-    res.status(201).json({ data: editPost })
-  } else {
-    res.status(400).json({ message: 'Please provide a valid input' })
-  }
+router.put('/:id', validatePostId(), (req, res) => {
+  postDB.update(req.params.id, req.body)
+  .then(user => {
+    console.log(user)
+    res.status(201).json({success: 'the post has been changed'})
+  })
+  .catch(error => {
+    res.status(500).json({error: 'something went wrong', error})
+  })
 })
 
 // custom middleware

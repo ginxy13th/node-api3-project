@@ -6,8 +6,8 @@ const server = express();
 const port = 5678;
 
 server.use(express.json());
-server.use('/users', userRouter)
-server.use('/posts', postRouter)
+server.use('/api/users', userRouter)
+server.use('/api/posts', postRouter)
 
 server.use((err, req, res, next) => {
     console.log(err)
