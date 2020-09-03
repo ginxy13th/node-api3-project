@@ -21,12 +21,17 @@ router.get('/:id', validatePostId(), (req, res) => {
 })
 
 router.delete('/:id', validatePostId(), (req, res) => {
-  const deletePost = postDB.remove(req.params.id)
-  if (deletePost) {
-    res.status(200).json({ data: deletePost })
-  } else {
-    res.status(400).json({ message: 'Post could not be deleted' })
-  }
+  postDB.remove(req.params.id)
+    .then(deleted => {
+      if (deleted) {
+        res.status(200).json({success: 'the post has been deleted'})
+      } else {
+        res.status(400).json({ message: 'post could not be deleted' })
+      }
+    })
+    .catch(error => {
+    res.status(500).json({error: 'something went wrong', error})
+  })
 })
 
 router.put('/:id', validatePostId(), (req, res) => {
